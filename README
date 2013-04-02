@@ -1,0 +1,3 @@
+Dancer2::Plugin::RoutePodCoverage
+
+Plugin to verify pod coverage in our app routes.
