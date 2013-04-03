@@ -8,7 +8,7 @@ WriteMakefile1(
     
     META_MERGE => {
         resources => {
-            repository => 'http://github.com/dinisrebolo/Dancer2-Plugin-RoutePodCoverage',
+            repository => 'https://github.com/dinisrebolo/Dancer2-Plugin-RoutePodCoverage',
         },
     },
 

@@ -18,7 +18,8 @@ my $data_struct = {'t::lib::MyApp::Routes' => {
                     ],
                     undocumented_routes => [
                         ['post','/']
-                    ]
+                    ],
+                    has_pod => 1
                     },
                     't::lib::MyApp::Routes2' => {
                     routes => [
@@ -28,9 +29,9 @@ my $data_struct = {'t::lib::MyApp::Routes' => {
                     undocumented_routes => [
                         ['post','/'],
                         ['get','/']
-                    ]
+                    ],
+                    has_pod => 1
                     }
-
                    };
 
 is_deeply(routes_pod_coverage(),$data_struct, 'route_pod_coverege');
@@ -44,7 +45,8 @@ my $data_struct_1 = {'t::lib::MyApp::Routes' => {
                     ],
                     undocumented_routes => [
                         ['post','/']
-                    ]
+                    ],
+                    has_pod => 1
                     }
                    };
 
@@ -61,7 +63,8 @@ my $data_struct_2 = {'t::lib::MyApp::Routes2' => {
                     undocumented_routes => [
                         ['post','/'],
                         ['get','/']
-                    ]
+                    ],
+                    has_pod => 1
                     }
                    };
 

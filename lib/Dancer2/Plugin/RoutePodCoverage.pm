@@ -9,7 +9,7 @@ use Pod::Simple::Search;
 use Pod::Simple::SimpleTree;
 use Carp 'croak';
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 my $PACKAGES_TO_COVER = [];
 
@@ -45,13 +45,15 @@ sub _get_routes {
                 push @$available_routes, [ $method, $r->spec_route ];
             }
         }
+        next unless @$available_routes;
+
         ## copy unreferenced array
-        $all_routes->{ $app->name }{routes} = [@$available_routes]
-          if @$available_routes;
+        $all_routes->{ $app->name }{routes} = [@$available_routes];
 
         my $undocumented_routes = [];
         my $file                = Pod::Simple::Search->new->find( $app->name );
         if ($file) {
+            $all_routes->{ $app->name }{ has_pod } = 1;
             my $parser       = Pod::Simple::SimpleTree->new->parse_file($file);
             my $pod_dataref  = $parser->root;
             my $found_routes = {};
@@ -82,6 +84,9 @@ sub _get_routes {
                     push @$undocumented_routes, [@$r];
                 }
             }
+        }
+        elsif ( @$available_routes ) { ### No POD Found
+            $all_routes->{ $app->name }{ has_pod } = 0 ;
         }
         $all_routes->{ $app->name }{undocumented_routes} = $undocumented_routes
           if @$undocumented_routes;
