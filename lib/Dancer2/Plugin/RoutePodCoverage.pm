@@ -9,7 +9,7 @@ use Pod::Simple::Search;
 use Pod::Simple::SimpleTree;
 use Carp 'croak';
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 my $PACKAGES_TO_COVER = [];
 
@@ -31,7 +31,6 @@ sub _get_routes {
 
     my $all_routes = {};
 
-    my ( $route, @urls );
     for my $app (@apps) {
         next
           if ( @$PACKAGES_TO_COVER && !grep { $app->name eq $_ }
@@ -72,7 +71,7 @@ sub _get_routes {
                     if ($pod_part->[0] =~ m/over/) {
                         $pod_string = lc $pod_part->[2][2];       
                     }
-                    $pod_string =~ s/\s+//g;
+                    $pod_string =~ s/['|"|\s]+//g;
                     $pod_string =~ s/\*/_REPLACED_STAR_/g;
                     if ( $pod_string =~ m/^$app_string$/ ) {
                         $found_routes->{$app_string} = 1;
