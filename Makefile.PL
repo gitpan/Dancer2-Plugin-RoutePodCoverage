@@ -5,7 +5,7 @@ WriteMakefile1(
     ABSTRACT     => "Plugin to verify pod coverage in our app routes",
     LICENSE      => 'perl',
     VERSION_FROM => 'lib/Dancer2/Plugin/RoutePodCoverage.pm',
-    
+    AUTHOR       => ['Dinis Rebolo', 'drebolo@cpan.org'],    
     META_MERGE => {
         resources => {
             repository => 'https://github.com/dinisrebolo/Dancer2-Plugin-RoutePodCoverage',

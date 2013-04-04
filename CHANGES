@@ -1,0 +1,12 @@
+Version 0.04
+        * no changes, just a proper build with make dist
+
+Version 0.03
+        * included verification if package has pod
+
+Version 0.02
+        * removed unused variables
+        * inproved substitution regular expression
+
+Version 0.01
+        * initial release

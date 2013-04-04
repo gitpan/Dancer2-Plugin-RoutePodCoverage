@@ -9,7 +9,7 @@ use Pod::Simple::Search;
 use Pod::Simple::SimpleTree;
 use Carp 'croak';
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 my $PACKAGES_TO_COVER = [];
 
