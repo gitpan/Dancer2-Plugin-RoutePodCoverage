@@ -4,11 +4,13 @@ author:
   - 'Dinis Rebolo'
   - drebolo@cpan.org
 build_requires:
-  ExtUtils::MakeMaker: 0
+  Test::NoWarnings: 0
+  Test::Pod: 0
+  Test::Pod::Coverage: 0
 configure_requires:
   ExtUtils::MakeMaker: 0
 dynamic_config: 1
-generated_by: 'ExtUtils::MakeMaker version 6.6302, CPAN::Meta::Converter version 2.120630'
+generated_by: 'ExtUtils::MakeMaker version 6.64, CPAN::Meta::Converter version 2.130880'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -22,6 +24,7 @@ requires:
   Dancer2: 0
   Pod::Simple::Search: 0
   Pod::Simple::SimpleTree: 0
+  perl: 5.010000
 resources:
-  repository: https://github.com/dinisrebolo/Dancer2-Plugin-RoutePodCoverage
-version: 0.04
+  repository: https://github.com/drebolo/Dancer2-Plugin-RoutePodCoverage
+version: 0.05

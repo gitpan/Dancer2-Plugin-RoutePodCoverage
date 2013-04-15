@@ -5,17 +5,24 @@ WriteMakefile1(
     ABSTRACT     => "Plugin to verify pod coverage in our app routes",
     LICENSE      => 'perl',
     VERSION_FROM => 'lib/Dancer2/Plugin/RoutePodCoverage.pm',
-    AUTHOR       => ['Dinis Rebolo', 'drebolo@cpan.org'],    
+    AUTHOR       => ['Dinis Rebolo', 'drebolo@cpan.org'],
+    MIN_PERL_VERSION => '5.10.0',    
     META_MERGE => {
         resources => {
-            repository => 'https://github.com/dinisrebolo/Dancer2-Plugin-RoutePodCoverage',
+            repository => 'https://github.com/drebolo/Dancer2-Plugin-RoutePodCoverage',
         },
     },
 
     PREREQ_PM => {
         'Dancer2' => 0,
         'Pod::Simple::Search' => 0,
-        'Pod::Simple::SimpleTree' => 0 
+        'Pod::Simple::SimpleTree' => 0
+    },
+
+    BUILD_REQUIRES => {
+	'Test::NoWarnings' => 0,
+	'Test::Pod' => 0,
+	'Test::Pod::Coverage' => 0 
     },
 
     test => {TESTS => join( ' ', (glob( 't/*.t'), glob('t/*/*.t')))},

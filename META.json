@@ -5,7 +5,7 @@
       "drebolo@cpan.org"
    ],
    "dynamic_config" : 1,
-   "generated_by" : "ExtUtils::MakeMaker version 6.6302, CPAN::Meta::Converter version 2.120630",
+   "generated_by" : "ExtUtils::MakeMaker version 6.64, CPAN::Meta::Converter version 2.130880",
    "license" : [
       "perl_5"
    ],
@@ -23,7 +23,9 @@
    "prereqs" : {
       "build" : {
          "requires" : {
-            "ExtUtils::MakeMaker" : "0"
+            "Test::NoWarnings" : "0",
+            "Test::Pod" : "0",
+            "Test::Pod::Coverage" : "0"
          }
       },
       "configure" : {
@@ -35,15 +37,16 @@
          "requires" : {
             "Dancer2" : "0",
             "Pod::Simple::Search" : "0",
-            "Pod::Simple::SimpleTree" : "0"
+            "Pod::Simple::SimpleTree" : "0",
+            "perl" : "5.010000"
          }
       }
    },
    "release_status" : "stable",
    "resources" : {
       "repository" : {
-         "url" : "https://github.com/dinisrebolo/Dancer2-Plugin-RoutePodCoverage"
+         "url" : "https://github.com/drebolo/Dancer2-Plugin-RoutePodCoverage"
       }
    },
-   "version" : "0.04"
+   "version" : "0.05"
 }
