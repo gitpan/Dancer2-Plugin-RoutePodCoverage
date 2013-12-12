@@ -1,3 +1,13 @@
-Dancer2::Plugin::RoutePodCoverage
 
-Plugin to verify pod coverage in our app routes.
+
+This archive contains the distribution Dancer2-Plugin-RoutePodCoverage,
+version 0.06:
+
+  Plugin to verify pod coverage in our app routes.
+
+This software is copyright (c) 2013 by Dinis Rebolo.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+

@@ -3,13 +3,13 @@ package Dancer2::Plugin::RoutePodCoverage;
 use strict;
 use warnings;
 
-use Dancer2 ':syntax';
+use Dancer2;
 use Dancer2::Plugin;
 use Pod::Simple::Search;
 use Pod::Simple::SimpleTree;
 use Carp 'croak';
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 my $PACKAGES_TO_COVER = [];
 
@@ -23,11 +23,11 @@ register 'packages_to_cover' => sub {
 };
 
 register 'routes_pod_coverage' => sub {
-    return _get_routes();
+    return _get_routes(@_);
 };
 
 sub _get_routes {
-    my @apps = @{ runner->server->apps };
+    my @apps = @{ $_[0]->runner->server->apps };
 
     my $all_routes = {};
 
@@ -37,12 +37,12 @@ sub _get_routes {
             @$PACKAGES_TO_COVER );
         my $routes           = $app->routes;
         my $available_routes = [];
-        foreach my $method ( keys %$routes ) {
+        foreach my $method ( sort { $b cmp $a } keys %$routes ) {
             foreach my $r ( @{ $routes->{$method} } ) {
 
                 # we don't need pod coverage for head
                 next if $method eq 'head';
-                push @$available_routes, [ $method, $r->spec_route ];
+                push @$available_routes, $method . ' ' . $r->spec_route;
             }
         }
         next unless @$available_routes;
@@ -60,20 +60,22 @@ sub _get_routes {
             for ( my $i = 0 ; $i < @$available_routes ; $i++ ) {
 
                 my $r          = $available_routes->[$i];
-                my $app_string = lc $r->[0] . $r->[1];
+                my $app_string = lc $r;
                 $app_string =~ s/\*/_REPLACED_STAR_/g;
 
-                ## discard first 2 elements
-                for ( my $idx = 2 ; $idx < @$pod_dataref ; $idx++ ) {
-
+                for ( my $idx = 0 ; $idx < @$pod_dataref ; $idx++ ) {
                     my $pod_part = $pod_dataref->[$idx];
-                    next if $pod_part->[0] !~ m/head1|head2|head3|head4|over/;
+
+                    next if ref $pod_part ne 'ARRAY';
+                    foreach my $ref_part (@$pod_part) {
+                        if (ref($ref_part) eq "ARRAY") {
+                            push @$pod_dataref, $ref_part;
+                        }
+                    }
 
                     my $pod_string = lc $pod_part->[2];
-                    if ($pod_part->[0] =~ m/over/) {
-                        $pod_string = lc $pod_part->[2][2];       
-                    }
-                    $pod_string =~ s/['|"|\s]+//g;
+                    $pod_string =~ s/['|"|\s]+/ /g;
+                    $pod_string =~ s/\s$//g;
                     $pod_string =~ s/\*/_REPLACED_STAR_/g;
                     if ( $pod_string =~ m/^$app_string$/ ) {
                         $found_routes->{$app_string} = 1;
@@ -81,15 +83,21 @@ sub _get_routes {
                     }
                 }
                 if ( !$found_routes->{$app_string} ) {
-                    push @$undocumented_routes, [@$r];
+                    push @$undocumented_routes, $r;
                 }
             }
         }
-        elsif ( @$available_routes ) { ### No POD Found
-            $all_routes->{ $app->name }{ has_pod } = 0 ;
+        else { ### no POD found
+            $all_routes->{ $app->name }{ has_pod } = 0;
         }
-        $all_routes->{ $app->name }{undocumented_routes} = $undocumented_routes
-          if @$undocumented_routes;
+        if (@$undocumented_routes) {
+            $all_routes->{ $app->name }{undocumented_routes} = $undocumented_routes;
+        }
+        elsif (! $all_routes->{ $app->name }{ has_pod }
+            && @{$all_routes->{ $app->name }{routes}} ){
+            ## copy dereferenced array
+            $all_routes->{ $app->name }{undocumented_routes} = [@{$all_routes->{ $app->name }{routes}}];
+        }
     }
     return $all_routes;
 }
@@ -112,7 +120,7 @@ Dancer2::Plugin::RoutePodCoverage - Plugin to verify pod coverage in our app rou
 
     use Dancer2;
     use Dancer2::Plugin::RoutePodCoverage;
-    
+
     get '/' => sub {
         my $routes_couverage = routes_pod_coverage();
 

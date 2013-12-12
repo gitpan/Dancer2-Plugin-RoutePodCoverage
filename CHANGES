@@ -1,3 +1,9 @@
+Version 0.06
+        * use sort to return always some order in route_pod_coverage
+        * start using Dist::Zilla 
+
+Version 0.05
+        
 Version 0.04
         * no changes, just a proper build with make dist
 

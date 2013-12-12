@@ -1,52 +1,61 @@
-use ExtUtils::MakeMaker;
 
-WriteMakefile1(
-    NAME         => 'Dancer2::Plugin::RoutePodCoverage',
-    ABSTRACT     => "Plugin to verify pod coverage in our app routes",
-    LICENSE      => 'perl',
-    VERSION_FROM => 'lib/Dancer2/Plugin/RoutePodCoverage.pm',
-    AUTHOR       => ['Dinis Rebolo', 'drebolo@cpan.org'],
-    MIN_PERL_VERSION => '5.10.0',    
-    META_MERGE => {
-        resources => {
-            repository => 'https://github.com/drebolo/Dancer2-Plugin-RoutePodCoverage',
-        },
-    },
+use strict;
+use warnings;
 
-    PREREQ_PM => {
-        'Dancer2' => 0,
-        'Pod::Simple::Search' => 0,
-        'Pod::Simple::SimpleTree' => 0
-    },
 
-    BUILD_REQUIRES => {
-	'Test::NoWarnings' => 0,
-	'Test::Pod' => 0,
-	'Test::Pod::Coverage' => 0 
-    },
 
-    test => {TESTS => join( ' ', (glob( 't/*.t'), glob('t/*/*.t')))},
+use ExtUtils::MakeMaker 6.30;
+
+
+
+my %WriteMakefileArgs = (
+  "ABSTRACT" => "Plugin to verify pod coverage in our app routes.",
+  "AUTHOR" => "Dinis Rebolo <drebolo\@cpan.org>",
+  "BUILD_REQUIRES" => {},
+  "CONFIGURE_REQUIRES" => {
+    "ExtUtils::MakeMaker" => "6.30"
+  },
+  "DISTNAME" => "Dancer2-Plugin-RoutePodCoverage",
+  "EXE_FILES" => [],
+  "LICENSE" => "perl",
+  "NAME" => "Dancer2::Plugin::RoutePodCoverage",
+  "PREREQ_PM" => {
+    "Dancer2" => "0.09",
+    "Pod::Simple::Search" => "3.28",
+    "Pod::Simple::SimpleTree" => "3.28"
+  },
+  "TEST_REQUIRES" => {
+    "Test::NoWarnings" => 0,
+    "Test::Pod" => 0,
+    "Test::Pod::Coverage" => 0
+  },
+  "VERSION" => "0.06",
+  "test" => {
+    "TESTS" => "t/*.t"
+  }
 );
 
-sub WriteMakefile1 {  #Written by Alexandr Ciornii, version 0.21. Added by eumm-upgrade.
-    my %params=@_;
-    my $eumm_version=$ExtUtils::MakeMaker::VERSION;
-    $eumm_version=eval $eumm_version;
-    die "EXTRA_META is deprecated" if exists $params{EXTRA_META};
-    die "License not specified" if not exists $params{LICENSE};
-    if ($params{BUILD_REQUIRES} and $eumm_version < 6.5503) {
-        #EUMM 6.5502 has problems with BUILD_REQUIRES
-        $params{PREREQ_PM}={ %{$params{PREREQ_PM} || {}} , %{$params{BUILD_REQUIRES}} };
-        delete $params{BUILD_REQUIRES};
-    }
-    delete $params{CONFIGURE_REQUIRES} if $eumm_version < 6.52;
-    delete $params{MIN_PERL_VERSION} if $eumm_version < 6.48;
-    delete $params{META_MERGE} if $eumm_version < 6.46;
-    delete $params{META_ADD} if $eumm_version < 6.46;
-    delete $params{LICENSE} if $eumm_version < 6.31;
-    delete $params{AUTHOR} if $] < 5.005;
-    delete $params{ABSTRACT_FROM} if $] < 5.005;
-    delete $params{BINARY_LOCATION} if $] < 5.005;
 
-    WriteMakefile(%params);
+my %FallbackPrereqs = (
+  "Dancer2" => "0.09",
+  "Pod::Simple::Search" => "3.28",
+  "Pod::Simple::SimpleTree" => "3.28",
+  "Test::NoWarnings" => 0,
+  "Test::Pod" => 0,
+  "Test::Pod::Coverage" => 0
+);
+
+
+unless ( eval { ExtUtils::MakeMaker->VERSION(6.63_03) } ) {
+  delete $WriteMakefileArgs{TEST_REQUIRES};
+  delete $WriteMakefileArgs{BUILD_REQUIRES};
+  $WriteMakefileArgs{PREREQ_PM} = \%FallbackPrereqs;
 }
+
+delete $WriteMakefileArgs{CONFIGURE_REQUIRES}
+  unless eval { ExtUtils::MakeMaker->VERSION(6.52) };
+
+WriteMakefile(%WriteMakefileArgs);
+
+
+
