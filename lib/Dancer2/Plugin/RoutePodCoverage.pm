@@ -27,8 +27,8 @@ register 'routes_pod_coverage' => sub {
 };
 
 sub _get_routes {
-    my @apps = @{ $_[0]->runner->server->apps };
-
+    my ($dsl) = @_;
+    my @apps = @{ $dsl->runner->apps };
     my $all_routes = {};
 
     for my $app (@apps) {
@@ -102,7 +102,7 @@ sub _get_routes {
     return $all_routes;
 }
 
-register_plugin for_versions => [2];
+register_plugin;
 
 1;
 
